@@ -1,0 +1,10 @@
+syntax = "proto3";
+package inventory_cf;
+import "google/protobuf/wrappers.proto";
+service InventoryService {
+		rpc getItem(google.protobuf.StringValue) returns (Item);
+}
+message Item {
+	string id = 1;
+	int64 quantity = 2;
+}

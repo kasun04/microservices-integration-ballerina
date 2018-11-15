@@ -1,0 +1,13 @@
+syntax = "proto3";
+package kasun.grpc.retail.inventory;
+import "google/protobuf/wrappers.proto";
+
+service InventoryService {
+    rpc getItemByID(google.protobuf.StringValue) returns (Item); 
+    rpc addItem(Item) returns (google.protobuf.BoolValue); 
+}
+
+message Item {
+	string id = 1;
+    int32 quantity = 2; 
+} 

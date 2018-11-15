@@ -1,0 +1,107 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: CatalogService
+  license:
+    name: MIT
+host: localhost:9090
+basePath: /catalog
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /products:
+    get:
+      summary: List all Products
+      operationId: listProducts
+      tags:
+        - Products
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: A paged array of Products
+          headers:
+            x-next:
+              type: string
+              description: A link to the next page of responses
+          schema:
+            $ref: '#/definitions/Products'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a Product
+      operationId: createProducts
+      tags:
+        - Products
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /products/{productId}:
+    get:
+      summary: Info for a specific Product
+      operationId: showProductById
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: The id of the Product to retrieve
+          type: string
+      responses:
+        "200":
+          description: Expected response to a valid request
+          schema:
+            $ref: '#/definitions/Products'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Product:
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      description:
+        type: string
+      price: 
+        type: number
+        format: double
+      quantity: 
+        type: integer
+        format: int64
+  Products:
+    type: array
+    items:
+      $ref: '#/definitions/Product'
+  Error:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

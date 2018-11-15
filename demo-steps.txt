@@ -1,0 +1,34 @@
+
+
+
+- Catalog 
+    - OpenAPI
+    - ballerina init 
+    - ballerina swagger mock ../service-defn/catalog_oapi.yaml -m ./demo/catalog 
+    - Run and invoke : curl localhost:9090/catalog/products/123 
+
+- ProdInfo 
+    - Proto IDL 
+    - ballerina grpc --input ../service-defn/prod_info.proto --output prodinfo --mode service
+    - Code and Run 
+
+- Inventory 
+    - Code-first gRPC
+
+- gRPC client stub generation 
+    - ballerina grpc --input ../service-defn/InventoryService.proto --output inventory-client --mode client  
+- Implementation of composition use case, run 
+
+
+- Checkout 
+    - RESTful service with Kafka producer 
+
+- Shipping 
+    - 
+
+- OrderProc 
+    - Kafka consumer 
+
+
+
+
