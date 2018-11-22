@@ -41,10 +41,12 @@ public function showProductById (http:Request _showProductByIdReq, string produc
     product.name = prodx.name; 
     product.price = prodx.price; 
     product.description = prodx.description; 
+    io:println("==== ProdInfo Service Invocation successful! ====");
 
     // Invoking Inventory service via gRPC 
     var (invItem, invHeaders) = check grpcInventory->getItem(productId, headers = ()); 
     product.quantity = invItem.quantity; 
+    io:println("==== Inventory Service Invocation successful! ====");
 
     // Generate the final JSON response 
     json product_j = check <json>product; 

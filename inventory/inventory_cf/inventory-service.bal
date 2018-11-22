@@ -1,4 +1,6 @@
 import ballerina/grpc;
+import ballerina/io;
+
 
 endpoint grpc:Listener gRPClistener {
     host: "localhost",
@@ -16,6 +18,7 @@ type Item record {
 service InventoryService bind gRPClistener {
     getItem(endpoint caller, string id) {
 
+        io:println("==== Inventory infomation found for Product ID - " + id);
         // Sample inventory data 
         Item inventoryItem;
         inventoryItem.id = "100105";
