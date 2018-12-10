@@ -14,9 +14,12 @@
 
 - Inventory 
     - Code-first gRPC
+    - ballerina build inventory_cf -> to generate proto 
 
 - gRPC client stub generation 
     - ballerina grpc --input ../service-defn/InventoryService.proto --output inventory-client --mode client  
+    - ballerina grpc --input ../service-defn/ --output product-client --mode client
+    
 - Implementation of composition use case, run 
 
 
@@ -24,10 +27,16 @@
     - RESTful service with Kafka producer 
 
 - Shipping 
-    - 
+    - Kafka consumer 
 
 - OrderProc 
-    - Kafka consumer 
+    - Kafka consumer to CSV files 
+
+- Microservices from dev to production 
+
+- Testing your services 
+- Deploying and CICD    
+
 
 
 

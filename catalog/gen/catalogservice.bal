@@ -3,12 +3,9 @@ import ballerina/log;
 import ballerina/mime;
 import ballerina/swagger;
 
-endpoint http:Listener ep0 { 
-    host: "localhost",
-    port: 9090
-};
+listener http:Listener ep0 = new(9090, config = {host: "localhost"});
 
-@swagger:ServiceInfo { 
+@swagger:ServiceInfo {
     title: "CatalogService",
     serviceVersion: "1.0.0",
     license: {name: "MIT", url: ""}
@@ -16,7 +13,7 @@ endpoint http:Listener ep0 {
 @http:ServiceConfig {
     basePath: "/catalog"
 }
-service CatalogService bind ep0 {
+service CatalogService on ep0 {
 
     @swagger:ResourceInfo {
         summary: "List all Products",
@@ -25,31 +22,32 @@ service CatalogService bind ep0 {
             {
                 name: "limit",
                 inInfo: "query",
-                description: "How many items to return at one time (max 100)",  
+                paramType: "int",
+                description: "How many items to return at one time (max 100)",
                 allowEmptyValue: ""
             }
         ]
     }
-    @http:ResourceConfig { 
+    @http:ResourceConfig {
         methods:["GET"],
         path:"/products"
     }
-    listProducts (endpoint outboundEp, http:Request _listProductsReq) { 
+    resource function listProducts (http:Caller outboundEp, http:Request _listProductsReq) {
         http:Response _listProductsRes = listProducts(_listProductsReq);
-        outboundEp->respond(_listProductsRes) but { error e => log:printError("Error while responding", err = e) };
+        _ = outboundEp->respond(_listProductsRes);
     }
 
     @swagger:ResourceInfo {
         summary: "Create a Product",
         tags: ["Products"]
     }
-    @http:ResourceConfig { 
+    @http:ResourceConfig {
         methods:["POST"],
         path:"/products"
     }
-    createProducts (endpoint outboundEp, http:Request _createProductsReq) { 
+    resource function createProducts (http:Caller outboundEp, http:Request _createProductsReq) {
         http:Response _createProductsRes = createProducts(_createProductsReq);
-        outboundEp->respond(_createProductsRes) but { error e => log:printError("Error while responding", err = e) };
+        _ = outboundEp->respond(_createProductsRes);
     }
 
     @swagger:ResourceInfo {
@@ -59,19 +57,20 @@ service CatalogService bind ep0 {
             {
                 name: "productId",
                 inInfo: "path",
-                description: "The id of the Product to retrieve", 
-                required: true, 
+                paramType: "string",
+                description: "The id of the Product to retrieve",
+                required: true,
                 allowEmptyValue: ""
             }
         ]
     }
-    @http:ResourceConfig { 
+    @http:ResourceConfig {
         methods:["GET"],
         path:"/products/{productId}"
     }
-    showProductById (endpoint outboundEp, http:Request _showProductByIdReq, string productId) { 
-        http:Response _showProductByIdRes = showProductById(_showProductByIdReq, untaint productId);
-        outboundEp->respond(_showProductByIdRes) but { error e => log:printError("Error while responding", err = e) };
+    resource function showProductById (http:Caller outboundEp, http:Request _showProductByIdReq, string productId) {
+        http:Response _showProductByIdRes = showProductById(_showProductByIdReq, productId);
+        _ = outboundEp->respond(_showProductByIdRes);
     }
 
 }

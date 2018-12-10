@@ -2,11 +2,7 @@ import ballerina/grpc;
 import ballerina/io;
 
 
-endpoint grpc:Listener gRPClistener {
-    host: "localhost",
-    port: 6061
-};
-
+listener grpc:Listener gRPClistener = new (6061);
 
 // Type definition for an order.
 type Item record {
@@ -15,17 +11,14 @@ type Item record {
 };
 
 @grpc:ServiceConfig
-service InventoryService bind gRPClistener {
-    getItem(endpoint caller, string id) {
-
+service InventoryService on gRPClistener {
+    resource function getItem(grpc:Caller caller, string id) {
         io:println("==== Inventory infomation found for Product ID - " + id);
         // Sample inventory data 
-        Item inventoryItem;
-        inventoryItem.id = "100105";
-        inventoryItem.quantity = 124;
-
+        Item inventoryItem = {id:"100105", quantity:124};
         // Send response to the caller.
         _ = caller->send(inventoryItem);
         _ = caller->complete();
     }
 }
+
